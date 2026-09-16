@@ -5,7 +5,6 @@ and drill into an order to see its customer and line items, with the ability to 
 fulfillment status.
 
 **Live app:** [pleasing-analysis-production-4296.up.railway.app](https://pleasing-analysis-production-4296.up.railway.app/)
-(admin login credentials are not published here — ask the repo owner for access)
 
 ![Orders list screenshot](docs/screenshot.png)
 
