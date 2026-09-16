@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchOrders, type Order } from "./api";
+import { fetchOrders, updateOrderStatus, type Order } from "./api";
 
-const STATUSES = ["", "pending", "paid", "shipped", "delivered"];
+const ORDER_STATUSES = ["pending", "paid", "shipped", "delivered"];
+const STATUSES = ["", ...ORDER_STATUSES];
 const PAGE_SIZE = 10;
 
 export function OrdersList({
@@ -21,6 +22,17 @@ export function OrdersList({
       .then(setOrders)
       .catch(() => setError("Failed to load orders"));
   }, [token, status, page]);
+
+  async function handleStatusChange(orderId: number, newStatus: string) {
+    try {
+      const updated = await updateOrderStatus(token, orderId, newStatus);
+      setOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, status: updated.status } : o))
+      );
+    } catch {
+      setError("Failed to update status");
+    }
+  }
 
   return (
     <div>
@@ -62,7 +74,18 @@ export function OrdersList({
             >
               <td>{order.id}</td>
               <td>{order.customer_id}</td>
-              <td>{order.status}</td>
+              <td onClick={(e) => e.stopPropagation()}>
+                <select
+                  value={order.status}
+                  onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                >
+                  {ORDER_STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </td>
               <td>${(order.total_cents / 100).toFixed(2)}</td>
             </tr>
           ))}
