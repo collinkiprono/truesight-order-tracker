@@ -18,6 +18,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
     "@types/pg": "^8.23.1"
   }
 }
